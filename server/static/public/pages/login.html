@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ChatterBox</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container">
+  <div class="page-header">
+    <div class="text-center">
+      <h1>Welcome to ChatterBox</h1>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="jumbotron">
+    <div class="row">
+      <div class="col">
+      </div>
+      <div class="col-5">
+        <div class="text-center">
+          <h3>Log in if you have an existing account</h3>
+        </div>
+        <form action="/login" method="POST">
+          <div class="form-group">
+           <label for="usr">User Name:</label>
+           <input type="text" class="form-control" placeholder="Enter your user name" id="usr" name="usr">
+          </div>
+          <div class="form-group">
+           <label for="pwd">Password:</label>
+           <input type="password" class="form-control" placeholder="Enter your password" id="pwd" name="pwd">
+          </div>
+          <div class="container">
+            <button type="submit" class="btn btn-primary btn-block">Start Chating</button>
+          </div>
+        </form>
+        <p/>
+        <div class="text-center">
+          <h3>Sign up to create a new account</h3>
+        </div>
+        <p/>
+        <form action="/signup" method="POST">
+          <div class="form-group">
+           <label for="usr">User Name:</label>
+           <input type="text" class="form-control" placeholder="Choose a user name" id="usr" name="usr">
+          </div>
+          <div class="form-group">
+           <label for="pwd">Password:</label>
+           <input type="password" class="form-control" placeholder="Select a password" id="pwd" name="pwd">
+          </div>
+          <div class="form-group">
+           <label for="pwd">Confirm Password:</label>
+           <input type="password" class="form-control" placeholder="Repeat your password" id="pwd">
+          </div>
+          <div class="container">
+            <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+          </div>
+        </form>
+      </div>
+      <div class="col">
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
