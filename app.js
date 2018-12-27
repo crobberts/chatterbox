@@ -9,16 +9,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", router);
 
+const connectedClients = {};
+
 io.on("connection", (socket) => {
-    console.log("a user connected");
+
+    socket.on("joined", (username) => {
+        
+    });
 
     socket.on("chatmessage", (value) => {
-        console.log(value);
-        socket.emit("broadcast", {"message": value});
+        io.sockets.emit("broadcast", {"message": value, "username":});
     });
 
     socket.on("disconnect", () => {
-        console.log("a user disconnected");
     });
 });
 
