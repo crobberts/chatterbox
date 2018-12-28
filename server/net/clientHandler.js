@@ -7,7 +7,6 @@ const USER_EXISTS_MSG = "Username taken";
 const EMPTY_STRING = "";
 const PWD_MISMATCH = "The passwords do not match!";
 const LOGIN_ERR = "Incorrect username or password";
-let socketConnection;
 
 router.get("/", (req, res) => {
     if (req.session.isLoggedIn) {
@@ -22,7 +21,6 @@ router.get("/", (req, res) => {
 
 router.get("/chat", (req, res) => {
     if (req.session.isLoggedIn) {
-        socketConnection.sockets.emit("username", {"username": req.session.username});
         res.render("public/chat", {username: req.session.username});
         return;
     }
@@ -85,24 +83,4 @@ router.post("/loginUser", (req, res) => {
     });
 });
 
-const wsCommunication = (io) => {
-    socketConnection = io;
-    connectedUsers = {};
-
-    io.on("connection", (socket) => {
-        connectedUsers[socket.username] = {connected: true};
-
-        socket.on("setUsername", (username) => {
-            socket.username = username;
-        });
-
-        socket.on("chatmessage", (messageInfo) => {
-            io.sockets.emit("broadcast", {"message": messageInfo.content, "username": socket.username});
-        });
-
-        socket.on("disconnect", () => {
-        });
-    });
-};
-
-module.exports = {router, wsCommunication};
+module.exports = router;
