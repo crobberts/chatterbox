@@ -29,10 +29,17 @@ router.post("/signup", (req, res) => {
         usr,
         pwd
     } = req.body;
-    
-    database.register(usr, pwd, (result) => {
-        console.log(result);
-    });
+
+    database.checkName(usr)
+    .then((result) => {
+        database.register(usr, pwd)
+        .then((result) => res.redirect("/chat"));
+    }, (err) => {
+        res.send("username taken");
+    })
+    .catch((err) => {
+        console.log(err);
+    })
 });
 
 module.exports = router;
