@@ -13,6 +13,14 @@ router.post("/login", (req, res) => {
         usr,
         pwd
     } = req.body;
+
+    database.loginUser(usr,pwd)
+    .then((result)=>{
+        res.redirect("/chat");
+    },
+    (err)=>{
+        res.send("Incorrect username or password");
+    });
 });
 
 router.get("/chat", (req, res) => {
