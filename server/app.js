@@ -6,7 +6,9 @@ const router = require('./net/clientHandler.js');
 const bodyParser = require('body-parser');
 const dbconn = require('./integration/userDAO.js');
 
-app.use(express.static('static'));
+app.engine('ejs', require('ejs').renderFile);
+app.set('view engine', 'ejs');
+app.use(express.static('views'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", router);
