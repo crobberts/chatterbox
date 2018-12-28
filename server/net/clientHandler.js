@@ -92,12 +92,12 @@ const wsCommunication = (io) => {
     io.on("connection", (socket) => {
         connectedUsers[socket.username] = {connected: true};
 
-        // socket.on("setUsername", (username) => {
-        //     socket.username = username;
-        // });
+        socket.on("setUsername", (username) => {
+            socket.username = username;
+        });
 
         socket.on("chatmessage", (messageInfo) => {
-            io.sockets.emit("broadcast", {"message": messageInfo.content});
+            io.sockets.emit("broadcast", {"message": messageInfo.content, "username": socket.username});
         });
 
         socket.on("disconnect", () => {
