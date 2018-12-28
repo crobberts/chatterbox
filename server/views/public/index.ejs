@@ -28,15 +28,15 @@
         <form action="/loginUser" method="POST">
           <div class="form-group">
            <label for="usr">User Name:</label>
-           <input type="text" class="form-control" placeholder="Enter your user name" id="usr" name="usr" required>
+           <input type="text" class="form-control" placeholder="Enter your user name" id="usrlog" name="usrlog" required>
           </div>
           <div class="form-group">
            <label for="pwd">Password:</label>
-           <input type="password" class="form-control" placeholder="Enter your password" id="pwd" name="pwd" required>
+           <input type="password" class="form-control" placeholder="Enter your password" id="pwdlog" name="pwdlog" required>
            <p><%= login_err %></p>
           </div>
           <div class="container">
-            <button type="submit" class="btn btn-primary btn-block">Start Chating</button>
+            <button type="submit" onclick="getUsername()" class="btn btn-primary btn-block">Start Chating</button>
           </div>
         </form>
         <p/>

@@ -1,13 +1,23 @@
 const socket = io();
+socket.username = document.getElementById('username').innerHTML;
+socket.emit("setUsername", socket.username);
 
-function sendMessage(event) {
-    socket.emit('chatmessage', document.getElementById('send').value);
+const sendMessage = (event) => {
+    socket.emit('chatmessage', {content: document.getElementById('send').value, username: socket.username});
     document.getElementById('send').value = "";
 }
 
-socket.on("broadcast", function(message) {
+socket.on("broadcast", (message) => {
     let asd = document.getElementById('chat_messages');
     let mbd = document.createElement('LI');
-    mbd.innerHTML = message.message;
+
+    mbd.innerHTML = socket.username + ": " + message.message;
     asd.appendChild(mbd);
 });
+
+socket.on("username", (usr) => {
+    let asd = document.getElementById('chat_messages');
+    let mdb = document.createElement('LI');
+    mdb.innerHTML = usr.username + " JOINED THE SERVER";
+    asd.appendChild(mdb);
+})

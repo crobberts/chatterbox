@@ -1,31 +1,23 @@
 const express = require('express');
-const app = express();
-const server = app.listen(3002);
-const io = require('socket.io').listen(server);
-const router = require('./net/clientHandler.js');
+const session = require('express-session');
+const router = require('./net/clientHandler.js').router;
 const bodyParser = require('body-parser');
 const dbconn = require('./integration/userDAO.js');
 
+const app = express();
+const server = app.listen(3002);
+const io = require('socket.io').listen(server);
+
+require('./net/clientHandler').wsCommunication(io);
 app.engine('ejs', require('ejs').renderFile);
 app.set('view engine', 'ejs');
+
+app.use(session({secret: 'harambe', saveUninitialized: false, resave: false}));
 app.use(express.static('views'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use("/", router);
-
-io.on("connection", (socket) => {
-
-    socket.on("joined", (username) => {
-        io.sockets.emit(username + " has joined the server");
-    });
-
-    socket.on("chatmessage", (value) => {
-        io.sockets.emit("broadcast", {"message": value});
-    });
-
-    socket.on("disconnect", () => {
-    });
-});
 
 dbconn.connectdb();
 

@@ -7,25 +7,23 @@ const USER_EXISTS_MSG = "Username taken";
 const EMPTY_STRING = "";
 const PWD_MISMATCH = "The passwords do not match!";
 const LOGIN_ERR = "Incorrect username or password";
+let socketConnection;
 
-let loggedIn = true;
 router.get("/", (req, res) => {
-    res.render("public/index", {ph: EMPTY_STRING,
-                                pwd_err: EMPTY_STRING,
-                                login_err: EMPTY_STRING
-                                });
-});
-
-router.post("/login", (req, res) => {
-    const {
-        usr,
-        pwd
-    } = req.body;
+    if (req.session.isLoggedIn) {
+        res.redirect("/chat");
+    } else {
+        res.render("public/index", {ph: EMPTY_STRING,
+                                    pwd_err: EMPTY_STRING,
+                                    login_err: EMPTY_STRING
+                                    });
+    }
 });
 
 router.get("/chat", (req, res) => {
-    if (loggedIn) {
-        res.render("public/chat");
+    if (req.session.isLoggedIn) {
+        socketConnection.sockets.emit("username", {"username": req.session.username});
+        res.render("public/chat", {username: req.session.username});
         return;
     }
 
@@ -52,7 +50,9 @@ router.post("/signup", (req, res) => {
     .checkName(usr)
     .then((result) => {
         database.register(usr, pwd)
-        .then((result) => res.redirect("/chat"));
+        .then((result) => {
+            res.redirect("/chat");
+        });
     }, (err) => {
         res.render("public/index", {ph: USER_EXISTS_MSG,
                                     pwd_err: EMPTY_STRING,
@@ -66,15 +66,18 @@ router.post("/signup", (req, res) => {
 
 router.post("/loginUser", (req, res) => {
     const {
-        usr,
-        pwd
+        usrlog,
+        pwdlog
     } = req.body;
 
-    database.loginUser(usr, pwd)
-    .then((result)=> {
+    database.loginUser(usrlog, pwdlog)
+    .then((result) => {
+        req.session.username = result[0].username;
+        req.session.isLoggedIn = true;
+
         res.redirect("/chat");
     },
-    (err)=>{
+    (err) => {
         res.render("public/index", {ph: EMPTY_STRING,
                                     pwd_err: EMPTY_STRING,
                                     login_err: LOGIN_ERR
@@ -82,4 +85,24 @@ router.post("/loginUser", (req, res) => {
     });
 });
 
-module.exports = router;
+const wsCommunication = (io) => {
+    socketConnection = io;
+    connectedUsers = {};
+
+    io.on("connection", (socket) => {
+        connectedUsers[socket.username] = {connected: true};
+
+        // socket.on("setUsername", (username) => {
+        //     socket.username = username;
+        // });
+
+        socket.on("chatmessage", (messageInfo) => {
+            io.sockets.emit("broadcast", {"message": messageInfo.content});
+        });
+
+        socket.on("disconnect", () => {
+        });
+    });
+};
+
+module.exports = {router, wsCommunication};

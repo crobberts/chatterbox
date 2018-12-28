@@ -4,12 +4,14 @@
        <meta charset="UTF-8">
        <title>Hello world</title>
        <script src="/socket.io/socket.io.js"></script>
-       <script type="text/javascript" src="../scripts/websockets.js"></script>
    </head>
    <body>
+       <h1>you are logged in as: <span id="username"> <%= username %> </span></h1>
        <ul id="chat_messages">
        </ul>
        <input name="send" id="send" type="text" value="">
        <button id="sendbtn" onclick="sendMessage()" name="submit">click me</button>
+       <div id="alert"></div>
    </body>
+   <script type="text/javascript" src="../scripts/websockets.js"></script>
 </html>
