@@ -83,7 +83,14 @@ router.post("/loginUser", (req, res) => {
 });
 
 router.get('*', (req, res) => {
-  res.render("public/pgnotfound");
+    res.render("public/pgnotfound");
+});
+
+router.post("logout", (req, res) => {
+    if (req.session.isLoggedIn) {
+        req.session.isLoggedIn = null;
+        req.session.username = null;
+    }
 });
 
 module.exports = router;

@@ -12,11 +12,12 @@ const logout = (event) => {
 }
 
 socket.on("broadcast", (message) => {
-    let asd = document.getElementById('chat_messages');
-    let mbd = document.createElement('LI');
+    let chatDiv = document.getElementById('chat_messages');
+    let chatMessage = document.createElement('LI');
 
-    mbd.innerHTML = message.username + ": " + message.message;
-    asd.appendChild(mbd);
+    chatMessage.innerHTML = message.username + ": " + message.message;
+    chatDiv.appendChild(chatMessage);
+    chatMessage.scrollIntoView();
 });
 
 socket.on("removeUser", (user) => {
@@ -29,10 +30,11 @@ socket.on("removeUser", (user) => {
         userList.appendChild(newChild);
     }
 
-    let asd = document.getElementById('chat_messages');
-    let mdb = document.createElement('LI');
-    mdb.innerHTML = user.username + " LEFT THE SERVER";
-    asd.appendChild(mdb);
+    let chatDiv = document.getElementById('chat_messages');
+    let chatMessage = document.createElement('LI');
+    chatMessage.innerHTML = user.username + " LEFT THE SERVER";
+    chatDiv.appendChild(chatMessage);
+    chatMessage.scrollIntoView();
 });
 
 socket.on("updatedList", (list) => {
@@ -51,8 +53,8 @@ socket.on("addConnectedUser", (user) => {
     newChild = document.createElement('LI');
     newChild.innerHTML = user;
     userList.appendChild(newChild);
-    let asd = document.getElementById('chat_messages');
-    let mdb = document.createElement('LI');
-    mdb.innerHTML = user + " JOINED THE SERVER";
-    asd.appendChild(mdb);
+    let chatDiv = document.getElementById('chat_messages');
+    let chatMessage = document.createElement('LI');
+    chatMessage.innerHTML = user + " JOINED THE SERVER";
+    chatDiv.appendChild(chatMessage);
 });
