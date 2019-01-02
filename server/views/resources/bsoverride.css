@@ -10,6 +10,16 @@
   border-color: lightgray;
 }
 
+.joined {
+    color: green;
+    font-weight: bold;
+}
+
+.left {
+    color: red;
+    font-weight: bold;
+}
+
 #users {
   background-color: white;
   overflow: auto;

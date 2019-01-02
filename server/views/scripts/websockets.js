@@ -33,6 +33,7 @@ socket.on("removeUser", (user) => {
 
     let chatDiv = document.getElementById('chat_messages');
     let chatMessage = document.createElement('LI');
+    chatMessage.className = "left";
     chatMessage.innerHTML = user.username + " LEFT THE SERVER";
     chatDiv.appendChild(chatMessage);
     chatMessage.scrollIntoView();
@@ -56,6 +57,7 @@ socket.on("newUser", (user) => {
     userList.appendChild(newChild);
     let chatDiv = document.getElementById('chat_messages');
     let chatMessage = document.createElement('LI');
+    chatMessage.className = "joined";
     chatMessage.innerHTML = user + " JOINED THE SERVER";
     chatDiv.appendChild(chatMessage);
     chatMessage.scrollIntoView();

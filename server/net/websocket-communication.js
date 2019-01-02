@@ -11,8 +11,8 @@ const wsCommunication = (io) => {
             if (!connectedUsers[socket.username]) {
                 connectedUsers[socket.username] = true;
 
-                io.sockets.emit("newUser", socket.username);
                 socket.emit("messageHistory", latestMessages);
+                io.sockets.emit("newUser", socket.username);
             }
         });
 
