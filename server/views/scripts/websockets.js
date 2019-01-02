@@ -3,7 +3,8 @@ const socket = io();
 socket.emit("setUsername", document.getElementById('username').innerHTML);
 
 const sendMessage = (event) => {
-    socket.emit('chatmessage', {content: document.getElementById('send').value});
+    let msg = document.getElementById('send').value;
+    socket.emit('chatmessage', {content: msg});
     document.getElementById('send').value = "";
 }
 
@@ -48,7 +49,7 @@ socket.on("updatedList", (list) => {
     }
 });
 
-socket.on("addConnectedUser", (user) => {
+socket.on("newUser", (user) => {
     let userList = document.getElementById('users');
     newChild = document.createElement('LI');
     newChild.innerHTML = user;
@@ -57,4 +58,23 @@ socket.on("addConnectedUser", (user) => {
     let chatMessage = document.createElement('LI');
     chatMessage.innerHTML = user + " JOINED THE SERVER";
     chatDiv.appendChild(chatMessage);
+    chatMessage.scrollIntoView();
 });
+
+socket.on("messageHistory", (messages) => {
+    let chatDiv = document.getElementById('chat_messages');
+    for (let i in messages) {
+        let nChatMessage = document.createElement('LI');
+        nChatMessage.innerHTML = messages[i].username + ": " + messages[i].content;
+        chatDiv.appendChild(nChatMessage);
+    }
+})
+
+socket.on("emptyMsg", () => {
+    let emptyMsgErr = document.getElementById('emptyMsgErr');
+    emptyMsgErr.innerHTML = "no spam plz";
+
+    setTimeout(() => {
+        emptyMsgErr.innerHTML = "";
+    }, 1000);
+})

@@ -14,7 +14,9 @@
         <h1 class="col-5">ChatterBox</h1>
         <div class="col-3">
          <h4>Logged in as <span id="username"> <%= username %> </span></h4>
-         <button id="logoutbtn" onclick="logout()" class="col-5 btn btn-primary" name="submit">Log Out</button>
+         <form method="POST" action="/logout">
+             <button id="logoutbtn" onclick="logout()" class="col-5 btn btn-primary" name="submit">Log Out</button>
+        </form>
         </div>
      </div>
        <div class="row">
@@ -27,6 +29,9 @@
             <div class="mt-4 row">
               <div class="col-12">
                 <input class="form-control" name="send" id="send" type="text" placeholder="Type your message here" value="">
+                <div>
+                    <p id="emptyMsgErr"></p>
+                </div>
               </div>
             </div>
             <div class="row">
@@ -49,4 +54,5 @@
        <div id="alert"></div>
    </body>
    <script type="text/javascript" src="../scripts/websockets.js"></script>
+   <script type="text/javascript" src="../scripts/event_config.js"></script>
 </html>

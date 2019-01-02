@@ -1,4 +1,5 @@
 let connectedUsers = {};
+let latestMessages = [];
 
 const wsCommunication = (io) => {
     io.on("connection", (socket) => {
@@ -10,11 +11,13 @@ const wsCommunication = (io) => {
             if (!connectedUsers[socket.username]) {
                 connectedUsers[socket.username] = true;
 
-                io.sockets.emit("addConnectedUser", socket.username);
+                io.sockets.emit("newUser", socket.username);
+                socket.emit("messageHistory", latestMessages);
             }
         });
 
         socket.on("chatmessage", (messageInfo) => {
+            latestMessages.push({content: messageInfo.content, username: socket.username});
             io.sockets.emit("broadcast", {"message": messageInfo.content, "username": socket.username});
         });
 
