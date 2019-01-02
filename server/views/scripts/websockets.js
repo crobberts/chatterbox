@@ -2,13 +2,13 @@ const socket = io();
 
 socket.emit("setUsername", document.getElementById('username').innerHTML);
 
-const logout = (event) => {
-  socket.emit('logout', ());
-}
-
 const sendMessage = (event) => {
     socket.emit('chatmessage', {content: document.getElementById('send').value});
     document.getElementById('send').value = "";
+}
+
+const logout = (event) => {
+  socket.emit('logout');
 }
 
 socket.on("broadcast", (message) => {
@@ -19,6 +19,14 @@ socket.on("broadcast", (message) => {
     asd.appendChild(mbd);
 });
 
+socket.on("removeUser", (user) => {
+    let userList = document.getElementById('users');
+
+    let asd = document.getElementById('chat_messages');
+    let mdb = document.createElement('LI');
+    mdb.innerHTML = user + " LEFT THE SERVER";
+    asd.appendChild(mdb);
+});
 
 socket.on("updatedList", (list) => {
     let userList = document.getElementById('users');
