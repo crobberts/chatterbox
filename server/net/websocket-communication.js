@@ -21,7 +21,7 @@ const wsCommunication = (io) => {
         socket.on("logout", () => {
           connectedUsers[socket.username] = false;
           delete connectedUsers[socket.username];
-          io.sockets.emit("updatedList", connectedUsers);
+          io.sockets.emit("removeUser", {users: connectedUsers, username: socket.username});
         });
     });
 };

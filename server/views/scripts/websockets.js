@@ -21,15 +21,23 @@ socket.on("broadcast", (message) => {
 
 socket.on("removeUser", (user) => {
     let userList = document.getElementById('users');
+    userList.innerHTML = "";
+
+    for (let i in user.users) {
+        newChild = document.createElement('LI');
+        newChild.innerHTML = i;
+        userList.appendChild(newChild);
+    }
 
     let asd = document.getElementById('chat_messages');
     let mdb = document.createElement('LI');
-    mdb.innerHTML = user + " LEFT THE SERVER";
+    mdb.innerHTML = user.username + " LEFT THE SERVER";
     asd.appendChild(mdb);
 });
 
 socket.on("updatedList", (list) => {
     let userList = document.getElementById('users');
+    userList.innerHTML = "";
 
     for (let i in list) {
         newChild = document.createElement('LI');
