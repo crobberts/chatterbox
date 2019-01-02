@@ -50,7 +50,7 @@ const loginUser = (username,password) => {
             if(result.length<=0) {
                 rej(result);
             }
-            
+
             res(result);
         })
     });

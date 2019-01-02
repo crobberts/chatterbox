@@ -28,7 +28,6 @@ router.get("/chat", (req, res) => {
     res.redirect("/");
 });
 
-
 router.post("/signup", (req, res) => {
     const {
         usr,
@@ -81,6 +80,10 @@ router.post("/loginUser", (req, res) => {
                                     login_err: LOGIN_ERR
                                     });
     });
+});
+
+router.get('*', (req, res) => {
+  res.render("public/pgnotfound");
 });
 
 module.exports = router;

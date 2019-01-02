@@ -2,6 +2,10 @@ const socket = io();
 
 socket.emit("setUsername", document.getElementById('username').innerHTML);
 
+const logout = (event) => {
+  socket.emit('logout', ());
+}
+
 const sendMessage = (event) => {
     socket.emit('chatmessage', {content: document.getElementById('send').value});
     document.getElementById('send').value = "";

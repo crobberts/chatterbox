@@ -18,7 +18,8 @@ const wsCommunication = (io) => {
             io.sockets.emit("broadcast", {"message": messageInfo.content, "username": socket.username});
         });
 
-        socket.on("disconnect", () => {
+        socket.on("logout", () => {
+          connectedUsers[socket.username] = false;
         });
     });
 };
