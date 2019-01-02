@@ -16,8 +16,9 @@ const connectdb = () => {
 
 const register = (username, password) => {
     return new Promise((res, rej) =>  {
-        let query = `INSERT INTO user (username, password) VALUES ('${username}', '${password}')`;
-        con.query(query, (err, result) => {
+        let query = `INSERT INTO user (username, password) VALUES (?, ?)`;
+        let inserts = [username,password];
+        con.query(query, inserts,(err, result) => {
             if (err) throw error;
 
             res(result);
@@ -27,8 +28,8 @@ const register = (username, password) => {
 
 const checkName = (username) => {
     return new Promise((res, rej) => {
-        let query = "SELECT username FROM user WHERE username = '" + username + "'";
-        con.query(query, (err, result) => {
+        let query = "SELECT username FROM user WHERE username = ? ";
+        con.query(query, username, (err, result) => {
             if (err) throw err;
 
             if (result.length > 0) {
