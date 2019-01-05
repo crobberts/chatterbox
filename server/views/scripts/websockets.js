@@ -5,6 +5,7 @@ socket.emit("setUsername", document.getElementById('username').innerHTML);
 const sendMessage = (event) => {
     let msg = document.getElementById('send').value;
     socket.emit('chatmessage', {content: msg});
+
     document.getElementById('send').value = "";
 }
 
@@ -70,13 +71,41 @@ socket.on("messageHistory", (messages) => {
         nChatMessage.innerHTML = messages[i].username + ": " + messages[i].content;
         chatDiv.appendChild(nChatMessage);
     }
-})
+});
 
 socket.on("emptyMsg", () => {
     let emptyMsgErr = document.getElementById('emptyMsgErr');
-    emptyMsgErr.innerHTML = "no spam plz";
+    emptyMsgErr.innerHTML = "no empty message allowed";
 
     setTimeout(() => {
         emptyMsgErr.innerHTML = "";
     }, 1000);
-})
+});
+
+/*SOCKET CONNECTION ERROR HANDLING*/
+
+socket.on("connect", () => {
+    let errorDiv = document.getElementById('error');
+    errorDiv.innerHTML= "Connected";
+    errorDiv.className = "joined";
+});
+
+socket.on
+socket.on("reconnect", () => {
+    let errorDiv = document.getElementById('error');
+    errorDiv.innerHTML= "reconnect";
+    errorDiv.className = "joined";
+});
+
+socket.on('connect_error', (err) => {
+    handleError();
+});
+
+const handleError = () => {
+    let errorDiv = document.getElementById('error');
+    errorDiv.innerHTML = "connect_failed";
+    let loadingImg = document.createElement('img');
+    loadingImg.src = "/public/images/spinning2.gif";
+    errorDiv.appendChild(loadingImg);
+    errorDiv.className = "left";
+}

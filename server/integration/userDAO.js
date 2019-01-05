@@ -7,10 +7,11 @@ const con = db.createConnection({
     database: "chatterbox"
 });
 
-const connectdb = () => {
+const connectdb = (callback) => {
     con.connect((err) => {
-        if (err) throw err;
-        console.log("connected to database");
+        if (err) return callback(err);
+
+        callback("connected to database");
     });
 }
 

@@ -7,8 +7,10 @@ const USER_EXISTS_MSG = "Username taken";
 const EMPTY_STRING = "";
 const PWD_MISMATCH = "The passwords do not match!";
 const LOGIN_ERR = "Incorrect username or password";
+const DATABASE_CONN_ERR = "Internal error";
 
 router.get("/", (req, res) => {
+
     if (req.session.isLoggedIn) {
         res.redirect("/chat");
     } else {
@@ -57,8 +59,11 @@ router.post("/signup", (req, res) => {
                                     });
     })
     .catch((err) => {
-        console.log(err);
-    })
+        res.render("public/index", {ph: DATABASE_CONN_ERR,
+                                    pwd_err: EMPTY_STRING,
+                                    login_err: EMPTY_STRING
+                                    });
+    });
 });
 
 router.post("/loginUser", (req, res) => {
@@ -74,8 +79,14 @@ router.post("/loginUser", (req, res) => {
 
         res.redirect("/chat");
     },
-    (err) => {
+    () => {
         res.render("public/index", {ph: EMPTY_STRING,
+                                    pwd_err: EMPTY_STRING,
+                                    login_err: LOGIN_ERR
+                                    });
+    })
+    .catch(() => {
+        res.render("public/index", {ph: DATABASE_ERR,
                                     pwd_err: EMPTY_STRING,
                                     login_err: LOGIN_ERR
                                     });

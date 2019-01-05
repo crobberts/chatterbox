@@ -7,7 +7,6 @@ const dbconn = require('./integration/userDAO.js');
 const app = express();
 const server = app.listen(3002);
 const io = require('socket.io').listen(server);
-
 require('./net/websocket-communication.js')(io);
 
 app.engine('ejs', require('ejs').renderFile);
@@ -20,6 +19,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", router);
 
-dbconn.connectdb();
+try {
+    dbconn.connectdb((res) => console.log(res));
+} catch(err) {
+    console.log("could not connect to database");
+}
 
 module.exports = app;

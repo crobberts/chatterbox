@@ -20,6 +20,11 @@
     font-weight: bold;
 }
 
+#loading {
+    width: 10%;
+    height: 10%;
+}
+
 #users {
   background-color: white;
   overflow: auto;

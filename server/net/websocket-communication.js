@@ -2,8 +2,8 @@ let connectedUsers = {};
 let latestMessages = [];
 
 const wsCommunication = (io) => {
+    
     io.on("connection", (socket) => {
-
         socket.on("setUsername", (username) => {
             socket.username = username;
             socket.emit("updatedList", connectedUsers);
@@ -26,6 +26,10 @@ const wsCommunication = (io) => {
           delete connectedUsers[socket.username];
           io.sockets.emit("removeUser", {users: connectedUsers, username: socket.username});
           socket.disconnect();
+        });
+
+        socket.on("disconnect", () => {
+            console.log('disonnected');
         });
     });
 };
