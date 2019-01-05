@@ -1,6 +1,10 @@
-const socket = io();
+/*Here we define the socket communication with the server*/
 
-socket.emit("setUsername", document.getElementById('username').innerHTML);
+/*initialization of the client socket, if connection errors occur it will
+try to reconnect five times to the server */
+const socket = io({
+    reconnecting: 5
+});
 
 const sendMessage = (event) => {
     let msg = document.getElementById('send').value;
@@ -21,6 +25,8 @@ socket.on("broadcast", (message) => {
     chatDiv.appendChild(chatMessage);
     chatMessage.scrollIntoView();
 });
+
+socket.emit("setUsername", document.getElementById('username').innerHTML);
 
 socket.on("removeUser", (user) => {
     let userList = document.getElementById('users');
@@ -84,28 +90,28 @@ socket.on("emptyMsg", () => {
 
 /*SOCKET CONNECTION ERROR HANDLING*/
 
+socket.onclose = (e) => {
+    handleError();
+}
+
 socket.on("connect", () => {
     let errorDiv = document.getElementById('error');
     errorDiv.innerHTML= "Connected";
     errorDiv.className = "joined";
 });
 
-socket.on
 socket.on("reconnect", () => {
     let errorDiv = document.getElementById('error');
     errorDiv.innerHTML= "reconnect";
     errorDiv.className = "joined";
 });
 
-socket.on('connect_error', (err) => {
+socket.on("connect_error", (err) => {
     handleError();
 });
 
 const handleError = () => {
     let errorDiv = document.getElementById('error');
-    errorDiv.innerHTML = "connect_failed";
-    let loadingImg = document.createElement('img');
-    loadingImg.src = "/public/images/spinning2.gif";
-    errorDiv.appendChild(loadingImg);
+    errorDiv.innerHTML = "Server error, reconnecting..";
     errorDiv.className = "left";
 }

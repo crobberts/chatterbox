@@ -1,6 +1,6 @@
 const express = require('express');
 const session = require('express-session');
-const router = require('./net/clientHandler.js');
+const router = require('./net/router.js');
 const bodyParser = require('body-parser');
 const dbconn = require('./integration/userDAO.js');
 
@@ -16,13 +16,12 @@ app.use(session({secret: 'harambe', saveUninitialized: false, resave: false}));
 app.use(express.static('views'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use("/", router);
 
-try {
-    dbconn.connectdb((res) => console.log(res));
-} catch(err) {
-    console.log("could not connect to database");
-}
+dbconn
+.connectdb()
+.then((res) => console.log(res))
+.catch((err) => console.log("could not connect to database"));
+
 
 module.exports = app;

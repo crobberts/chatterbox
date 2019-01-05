@@ -2,16 +2,16 @@ let connectedUsers = {};
 let latestMessages = [];
 
 const wsCommunication = (io) => {
-    
+
     io.on("connection", (socket) => {
+        socket.emit("messageHistory", latestMessages);
+        
         socket.on("setUsername", (username) => {
             socket.username = username;
             socket.emit("updatedList", connectedUsers);
 
             if (!connectedUsers[socket.username]) {
                 connectedUsers[socket.username] = true;
-
-                socket.emit("messageHistory", latestMessages);
                 io.sockets.emit("newUser", socket.username);
             }
         });

@@ -46,24 +46,23 @@ router.post("/signup", (req, res) => {
     }
 
     database
-    .checkName(usr)
-    .then((result) => {
-        database.register(usr, pwd)
-        .then((result) => {
-            res.redirect("/chat");
-        });
-    }, (err) => {
-        res.render("public/index", {ph: USER_EXISTS_MSG,
-                                    pwd_err: EMPTY_STRING,
-                                    login_err: EMPTY_STRING
-                                    });
+    .register(usr, pwd)
+    .then((res) => {
+        res.render("public/chat");
     })
     .catch((err) => {
-        res.render("public/index", {ph: DATABASE_CONN_ERR,
-                                    pwd_err: EMPTY_STRING,
-                                    login_err: EMPTY_STRING
-                                    });
-    });
+        if (err.database_failure) {
+            res.render("public/index", {ph: DATABASE_CONN_ERR,
+                                        pwd_err: EMPTY_STRING,
+                                        login_err: EMPTY_STRING
+                                        });
+        } else {
+            res.render("public/index", {ph: USER_EXISTS_MSG,
+                                        pwd_err: EMPTY_STRING,
+                                        login_err: EMPTY_STRING
+                                        })
+        }
+    })
 });
 
 router.post("/loginUser", (req, res) => {

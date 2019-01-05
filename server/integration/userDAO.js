@@ -7,38 +7,40 @@ const con = db.createConnection({
     database: "chatterbox"
 });
 
-const connectdb = (callback) => {
-    con.connect((err) => {
-        if (err) return callback(err);
+const connectdb = () => {
+    return new Promise((res, rej) => {
+        con.connect((err) => {
+            if (err) rej(err);
 
-        callback("connected to database");
-    });
-}
-
-const register = (username, password) => {
-    return new Promise((res, rej) =>  {
-        let query = `INSERT INTO user (username, password) VALUES (?, ?)`;
-        let inserts = [username,password];
-        con.query(query, inserts,(err, result) => {
-            if (err) throw error;
-
-            res(result);
+            res("connected to database");
         });
     });
 }
 
-const checkName = (username) => {
+const register = (username, password) => {
     return new Promise((res, rej) => {
         let query = "SELECT username FROM user WHERE username = ? ";
         con.query(query, username, (err, result) => {
-            if (err) throw err;
-
-            if (result.length > 0) {
-                rej(result);
+            if (err) {
+                rej({database_failure: true});
+                return;
             }
 
-            res(result);
-        })
+            if (result.length > 0) {
+                rej({usernameTaken: true});
+            }
+
+            query = `INSERT INTO user (username, password) VALUES (?, ?)`;
+            let inserts = [username,password];
+            con.query(query, inserts, (err, result) => {
+                if (err) {
+                    rej({database_failure: true});
+                    return;
+                }
+
+                res();
+            });
+        });
     });
 }
 
@@ -46,11 +48,15 @@ const loginUser = (username,password) => {
     return new Promise((res, rej) => {
         let query = "SELECT username FROM user WHERE username = ? AND password = ?";
         let inserts = [username,password];
-        con.query(query, inserts, (err, result) =>{
-            if (err) throw err;
+        con.query(query, inserts, (err, result) => {
+            if (err) {
+                rej(err);
+                return;
+            };
 
             if(result.length<=0) {
                 rej(result);
+                return;
             }
 
             res(result);
@@ -58,5 +64,4 @@ const loginUser = (username,password) => {
     });
 }
 
-
-module.exports = {register, connectdb, checkName, loginUser};
+module.exports = {register, connectdb, loginUser};
