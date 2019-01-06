@@ -12,6 +12,15 @@ let connected = false;
 	Tries to connect to database
 	@throws
 **/
+
+/*
+If the database server crashes during runtime, this event will be invoked
+instead of crashing the server due to an unhandled error.
+*/
+con.on("error", (err) => {
+    console.log(err.code);
+});
+
 const connectdb = () => {
     return new Promise((res, rej) => {
         con.connect((err) => {
