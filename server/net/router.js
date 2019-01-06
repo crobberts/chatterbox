@@ -19,7 +19,7 @@ const DOES_NOT_EXIST_URL = "*";
 
 /**
   @param LOGIN_URL - url of the login page
- 
+
   @callback - User will be shown the log in page when requesting the log in page.
 	If they are already logged in, they will be redirected to the chat page
 **/
@@ -37,7 +37,7 @@ router.get(LOGIN_URL, (req, res) => {
 
 /**
 	@param CHAT_URL - url of the chat page
-	
+
 	@callback - User will be redirected to the log in page if they are not logged in.
 		If user is logged in, the chat page will be rendered.
 **/
@@ -52,9 +52,9 @@ router.get(CHAT_URL, (req, res) => {
 
 /**
 	@param SIGN_UP_URL - url of the sign up request
-	
+
 	@callback - The user will be registered and logged in if the input is valid.
-		If the username was taken, passwords did not match or there was a database problem, 
+		If the username was taken, passwords did not match or there was a database problem,
 		the user will get an appropriate error message.
 **/
 router.post(SIGN_UP_URL, (req, res) => {
@@ -87,14 +87,14 @@ router.post(SIGN_UP_URL, (req, res) => {
             res.render("public/index", {ph: USER_EXISTS_MSG,
                                         pwd_err: EMPTY_STRING,
                                         login_err: EMPTY_STRING
-                                        })
+                                        });
         }
     })
 });
 
 /**
 	@param LOGIN_USER_URL - url of the login request
-	
+
 	@callback - User is logged in if username and password are correct.
 		If the input is incorrect, an appropriate error message is displayed.
 **/
@@ -110,23 +110,24 @@ router.post(LOGIN_USER_URL, (req, res) => {
         req.session.isLoggedIn = true;
 
         res.redirect(CHAT_URL);
-    },
-    () => {
-        res.render("public/index", {ph: EMPTY_STRING,
-                                    pwd_err: EMPTY_STRING,
-                                    login_err: LOGIN_ERR
-                                    });
     })
-    .catch(() => {
-        res.render("public/index", {ph: DATABASE_ERR,
-                                    pwd_err: EMPTY_STRING,
-                                    login_err: LOGIN_ERR
-                                    });
+    .catch((err) => {
+        if (err.database_failure) {
+            res.render("public/index", {ph: EMPTY_STRING,
+                                        pwd_err: EMPTY_STRING,
+                                        login_err: DATABASE_CONN_ERR
+                                        });
+        } else {
+            res.render("public/index", {ph: EMPTY_STRING,
+                                        pwd_err: EMPTY_STRING,
+                                        login_err: LOGIN_ERR
+                                        });
+        }
     });
 });
 /**
 	@param DOES_NOT_EXIST_URL - url of the login request
-	
+
 	@callback - 404 page not found is rendered.
 **/
 
@@ -136,7 +137,7 @@ router.get(DOES_NOT_EXIST_URL, (req, res) => {
 
 /**
 	@param LOGOUT_URL - url of the logout request
-	
+
 	@callback - User is logged out.
 **/
 

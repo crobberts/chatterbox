@@ -7,9 +7,9 @@ const con = db.createConnection({
     database: "chatterbox"
 });
 
-/**	
+/**
 	Tries to connect to database
-	@throws 
+	@throws
 **/
 const connectdb = () => {
     return new Promise((res, rej) => {
@@ -21,14 +21,14 @@ const connectdb = () => {
     });
 }
 
-/**	
+/**
 	Tries to register user
-	
+
 	@param username - Username that is to be registered for user
 	@param password - Password that is to be registered for user
 	@throws database_failure - If a query results in an error
 	@throws usernameTaken - If the username already exists in the database
-	
+
 **/
 const register = (username, password) => {
     return new Promise((res, rej) => {
@@ -56,13 +56,13 @@ const register = (username, password) => {
         });
     });
 }
-/**	
+/**
 	Tries to log in, throws appropriate error on database failure or if incorrect password/non-existing user
-	
+
 	@param username - User that is trying to log in
 	@param password - Password for the user
 	@throw - If no matching user found
-	
+
 **/
 const loginUser = (username,password) => {
     return new Promise((res, rej) => {
@@ -70,12 +70,12 @@ const loginUser = (username,password) => {
         let inserts = [username,password];
         con.query(query, inserts, (err, result) => {
             if (err) {
-                rej(err);
+                rej({database_failure: true});
                 return;
             };
 
             if(result.length<=0) {
-                rej(result);
+                rej({incorrect_data: true});
                 return;
             }
 
