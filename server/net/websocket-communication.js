@@ -31,7 +31,7 @@ const wsCommunication = (io) => {
             }
         });
 
-        socket.on(CHAT_MESSAGE (messageInfo) => {
+        socket.on(CHAT_MESSAGE, (messageInfo) => {
             latestMessages.push({content: messageInfo.content, username: socket.username});
             io.sockets.emit("broadcast", {"message": messageInfo.content, "username": socket.username});
         });

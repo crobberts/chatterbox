@@ -13,7 +13,7 @@ const LOGIN_URL = "/";
 const CHAT_URL = "/chat";
 const SIGN_UP_URL = "/signup";
 const LOGIN_USER_URL = "/loginUser";
-const LOGOUT_URL = "/lougout";
+const LOGOUT_URL = "/logout";
 const DOES_NOT_EXIST_URL = "*";
 
 
