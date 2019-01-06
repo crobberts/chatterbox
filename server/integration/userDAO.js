@@ -7,6 +7,7 @@ const con = db.createConnection({
     database: "chatterbox"
 });
 
+let connected = false;
 /**
 	Tries to connect to database
 	@throws
@@ -14,8 +15,12 @@ const con = db.createConnection({
 const connectdb = () => {
     return new Promise((res, rej) => {
         con.connect((err) => {
-            if (err) rej(err);
+            if (err) {
+                rej(err);
+                return;
+            };
 
+            connected = true;
             res("connected to database");
         });
     });
@@ -32,6 +37,11 @@ const connectdb = () => {
 **/
 const register = (username, password) => {
     return new Promise((res, rej) => {
+        if (!connected) {
+            rej({database_failure: true});
+            return;
+        }
+
         let query = "SELECT username FROM user WHERE username = ? ";
         con.query(query, username, (err, result) => {
             if (err) {
@@ -41,6 +51,7 @@ const register = (username, password) => {
 
             if (result.length > 0) {
                 rej({usernameTaken: true});
+                return;
             }
 
             query = `INSERT INTO user (username, password) VALUES (?, ?)`;
@@ -66,6 +77,11 @@ const register = (username, password) => {
 **/
 const loginUser = (username,password) => {
     return new Promise((res, rej) => {
+        if (!connected) {
+            rej({database_failure: true});
+            return;
+        }
+
         let query = "SELECT username FROM user WHERE username = ? AND password = ?";
         let inserts = [username,password];
         con.query(query, inserts, (err, result) => {
